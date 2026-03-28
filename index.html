@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sintesa - Active Literacy & Innovation</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        },
+                        accent: {
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Styles & Animations */
+        body {
+            background-color: #f8fafc;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .step-hidden {
+            display: none !important;
+        }
+        
+        /* Custom Scrollbar for reading section */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* Knowledge Graph Node Styles */
+        .kg-node {
+            position: relative;
+        }
+        .kg-node::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            width: 2px;
+            height: 20px;
+            background-color: #cbd5e1;
+            transform: translateX(-50%);
+        }
+        .kg-node:last-child::after {
+            display: none;
+        }
+        
+        /* Toast Animation */
+        .toast-enter {
+            animation: slideInRight 0.3s ease-out forwards;
+        }
+        .toast-leave {
+            animation: fadeOut 0.3s ease-in forwards;
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2 cursor-pointer" onclick="switchView('main-app-view')">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-accent-600 flex items-center justify-center text-white font-bold text-xl">S</div>
+                    <span class="font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-brand-900 to-accent-600">Sintesa</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <button onclick="switchView('workspace-view')" id="nav-workspace" class="text-slate-500 hover:text-brand-600 font-medium transition nav-link">Workspace</button>
+                    <button onclick="switchView('explore-view')" id="nav-explore" class="text-slate-500 hover:text-brand-600 transition nav-link">Eksplorasi</button>
+                    <button onclick="switchView('leaderboard-view')" id="nav-leaderboard" class="text-slate-500 hover:text-brand-600 transition nav-link">Leaderboard Lokal</button>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-semibold cursor-pointer hover:bg-slate-300 transition">
+                        <i class="fa-regular fa-user"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow w-full max-w-5xl mx-auto px-4 sm:px-6 py-8 relative">
+
+        <!-- VIEWS MANAGER -->
+        
+        <!-- 1. MAIN APP VIEW (Sintesis Flow) -->
+        <div id="main-app-view" class="view-section">
+            
+            <!-- STEP 0: LANDING & DASHBOARD -->
+            <div id="step-0" class="fade-in">
+                <div class="text-center py-12 px-4 rounded-3xl bg-gradient-to-br from-brand-900 via-brand-800 to-accent-900 text-white shadow-xl mb-12 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiNmZmZmZmYiLz48L3N2Zz4=')]"></div>
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 relative z-10">Ubah Literasi Menjadi Inovasi</h1>
+                    <p class="text-lg md:text-xl text-brand-100 max-w-2xl mx-auto mb-8 relative z-10">Sintesa menggabungkan literatur lintas disiplin (Syntopical Reading) dengan AI untuk membantu Anda menciptakan solusi baru berbasis sains.</p>
+                    <button onclick="goToStep(1)" class="relative z-10 bg-white text-brand-900 hover:bg-brand-50 font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:-translate-y-1">
+                        Mulai Sintesis Baru <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- Fitur 1 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition">
+                        <div class="w-12 h-12 bg-brand-100 text-brand-600 rounded-xl flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-code-branch"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2">Cross-Pollination</h3>
+                        <p class="text-slate-500 text-sm">AI merekomendasikan literatur dari dua bidang berbeda untuk menantang kreativitas Anda.</p>
+                    </div>
+                    <!-- Fitur 2 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition">
+                        <div class="w-12 h-12 bg-accent-100 text-accent-600 rounded-xl flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-lightbulb"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2">Dynamic Incubator</h3>
+                        <p class="text-slate-500 text-sm">Ubah ide mentah menjadi draft Proposal, Pitch Deck, atau Business Model Canvas (BMC).</p>
+                    </div>
+                    <!-- Fitur 3 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition">
+                        <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-network-wired"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2">Citation Network</h3>
+                        <p class="text-slate-500 text-sm">Setiap ide dilacak kembali ke jurnal aslinya, mematikan misinformasi dan membangun validitas.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 1: INPUT MINAT & MASALAH -->
+            <div id="step-1" class="step-hidden fade-in max-w-3xl mx-auto">
+                <button onclick="goToStep(0)" class="text-sm text-slate-500 hover:text-brand-600 mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Kembali
+                </button>
+                
+                <h2 class="text-2xl font-bold mb-2">Pilih Fokus Inovasi Anda</h2>
+                <p class="text-slate-500 mb-8">Tentukan wilayah studi kasus dan dua bidang utama yang ingin Anda hubungkan.</p>
+
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200">
+                    
+                    <!-- Regional Filter -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Studi Kasus Wilayah (Gamifikasi Lokal)</label>
+                        <select id="region-select" class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent appearance-none bg-slate-50">
+                            <option value="Bangka Belitung">Kepulauan Bangka Belitung (Fokus: Pesisir & Tambang)</option>
+                            <option value="Jawa Barat">Jawa Barat (Fokus: Pertanian & Urbanisasi)</option>
+                            <option value="Kalimantan Timur">Kalimantan Timur (Fokus: Ekologi Hutan & IKN)</option>
+                            <option value="Nusa Tenggara Timur">Nusa Tenggara Timur (Fokus: Kekeringan & Pariwisata)</option>
+                        </select>
+                    </div>
+
+                    <!-- Topic Selection -->
+                    <div class="mb-8">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Pilih 2 Bidang untuk Disintesis</label>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="topic-grid">
+                            <!-- Options -->
+                            <div class="topic-btn cursor-pointer border-2 border-slate-200 rounded-xl p-3 text-center transition hover:border-brand-400" onclick="toggleTopic(this, 'Internet of Things (IoT)')">
+                                <i class="fa-solid fa-microchip text-2xl text-slate-400 mb-2 block"></i>
+                                <span class="text-xs font-semibold">Internet of Things</span>
+                            </div>
+                            <div class="topic-btn cursor-pointer border-2 border-slate-200 rounded-xl p-3 text-center transition hover:border-brand-400" onclick="toggleTopic(this, 'Budaya Lokal')">
+                                <i class="fa-solid fa-mask text-2xl text-slate-400 mb-2 block"></i>
+                                <span class="text-xs font-semibold">Budaya Lokal</span>
+                            </div>
+                            <div class="topic-btn cursor-pointer border-2 border-slate-200 rounded-xl p-3 text-center transition hover:border-brand-400" onclick="toggleTopic(this, 'Krisis Lingkungan')">
+                                <i class="fa-solid fa-leaf text-2xl text-slate-400 mb-2 block"></i>
+                                <span class="text-xs font-semibold">Lingkungan</span>
+                            </div>
+                            <div class="topic-btn cursor-pointer border-2 border-slate-200 rounded-xl p-3 text-center transition hover:border-brand-400" onclick="toggleTopic(this, 'Ekonomi Kreatif')">
+                                <i class="fa-solid fa-store text-2xl text-slate-400 mb-2 block"></i>
+                                <span class="text-xs font-semibold">Ekonomi Kreatif</span>
+                            </div>
+                        </div>
+                        <p id="topic-warning" class="text-red-500 text-xs mt-2 hidden">Pilih tepat 2 bidang untuk melanjutkan.</p>
+                    </div>
+
+                    <button onclick="processStep1()" class="w-full bg-brand-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-brand-700 transition shadow-md flex justify-center items-center gap-2">
+                        Cari Literatur <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 2: CURATED READING (CROSS-POLLINATION) -->
+            <div id="step-2" class="step-hidden fade-in">
+                <div class="flex justify-between items-end mb-6">
+                    <div>
+                        <span class="text-xs font-bold tracking-wider text-brand-600 uppercase mb-1 block">Tahap 2 / 4</span>
+                        <h2 class="text-2xl font-bold">Curated Reading</h2>
+                        <p class="text-slate-500 text-sm">AI telah menemukan 2 jurnal terverifikasi berdasarkan pilihan Anda.</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <!-- Literatur 1 -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col h-[500px]">
+                        <div class="p-4 border-b border-slate-100 bg-brand-50 rounded-t-2xl flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-full bg-brand-200 text-brand-700 flex items-center justify-center font-bold text-sm">1</span>
+                            <div>
+                                <span class="text-xs font-semibold text-brand-600" id="lit1-tag">Topik 1</span>
+                                <h3 class="font-bold text-sm leading-tight text-slate-800" id="lit1-title">Judul Jurnal 1</h3>
+                            </div>
+                        </div>
+                        <div class="p-5 overflow-y-auto custom-scrollbar flex-grow text-sm text-slate-600 leading-relaxed">
+                            <p class="mb-3"><strong>Jurnal:</strong> <span id="lit1-journal">Nama Jurnal Q1</span></p>
+                            <p class="mb-3"><strong>Abstrak:</strong> <span id="lit1-abstract">Isi abstrak...</span></p>
+                            <p><strong>Temuan Kunci:</strong> <span id="lit1-findings">Temuan...</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Literatur 2 -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col h-[500px]">
+                        <div class="p-4 border-b border-slate-100 bg-accent-50 rounded-t-2xl flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-full bg-accent-200 text-accent-700 flex items-center justify-center font-bold text-sm">2</span>
+                            <div>
+                                <span class="text-xs font-semibold text-accent-600" id="lit2-tag">Topik 2</span>
+                                <h3 class="font-bold text-sm leading-tight text-slate-800" id="lit2-title">Judul Jurnal 2</h3>
+                            </div>
+                        </div>
+                        <div class="p-5 overflow-y-auto custom-scrollbar flex-grow text-sm text-slate-600 leading-relaxed">
+                            <p class="mb-3"><strong>Jurnal:</strong> <span id="lit2-journal">Nama Jurnal Q2</span></p>
+                            <p class="mb-3"><strong>Abstrak:</strong> <span id="lit2-abstract">Isi abstrak...</span></p>
+                            <p><strong>Temuan Kunci:</strong> <span id="lit2-findings">Temuan...</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center">
+                    <button onclick="goToStep(3)" class="bg-brand-900 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-slate-800 transition flex items-center gap-3">
+                        Saya Sudah Membaca & Siap Mensintesis <i class="fa-solid fa-bolt text-yellow-400"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 3: SYNTHESIS CHALLENGE -->
+            <div id="step-3" class="step-hidden fade-in max-w-4xl mx-auto">
+                <div class="mb-6">
+                    <span class="text-xs font-bold tracking-wider text-accent-600 uppercase mb-1 block">Tahap 3 / 4</span>
+                    <h2 class="text-2xl font-bold mb-2">Synthesis Challenge</h2>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden mb-6">
+                    <!-- AI Prompt Header -->
+                    <div class="bg-slate-900 p-5 text-white flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-400 to-accent-500 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-1">AI Cross-Pollination Engine</h3>
+                            <p class="text-slate-300 text-sm leading-relaxed" id="ai-challenge-text">
+                                Tantangan: Gabungkan teknologi "Topik A" dengan konsep "Topik B" untuk memecahkan masalah lingkungan di <span id="display-region" class="font-bold text-yellow-300">Wilayah Anda</span>. 
+                                <br><br>
+                                <em>Tuliskan inti ide inovasi Anda. Apa namanya, bagaimana cara kerjanya, dan nilai tambahnya?</em>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- User Input -->
+                    <div class="p-5 bg-slate-50">
+                        <textarea id="user-idea" class="w-full h-48 border border-slate-300 rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-accent-500 text-slate-700 resize-none" placeholder="Tuliskan gagasan inovasi Anda di sini... (Contoh: Saya ingin membuat sebuah sistem terpadu yang menggabungkan... )"></textarea>
+                        
+                        <div id="word-count" class="text-xs text-slate-500 mt-2 text-right">0 Kata (Min. 20 Kata)</div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center">
+                    <button onclick="goToStep(2)" class="text-slate-500 hover:text-slate-800 font-medium px-4 py-2">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Baca Lagi
+                    </button>
+                    <button id="btn-generate" onclick="generateOutput()" class="bg-accent-600 text-white font-bold py-3 px-8 rounded-xl shadow-md hover:bg-accent-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        Strukturkan Ide dengan AI <i class="fa-solid fa-wand-magic-sparkles ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- LOADING STATE -->
+            <div id="loading-state" class="step-hidden fade-in flex flex-col items-center justify-center py-20">
+                <div class="w-16 h-16 border-4 border-slate-200 border-t-accent-600 rounded-full animate-spin mb-6"></div>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Dynamic Idea Incubator sedang bekerja...</h3>
+                <p class="text-slate-500" id="loading-text">Mengekstrak konsep...</p>
+            </div>
+
+            <!-- STEP 4: OUTPUT GENERATION (BMC & CITATION) -->
+            <div id="step-4" class="step-hidden fade-in">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+                    <div>
+                        <span class="text-xs font-bold tracking-wider text-emerald-600 uppercase mb-1 block">Tahap 4 / 4 - Hasil Sintesis</span>
+                        <h2 class="text-3xl font-bold text-slate-900" id="output-title">Proyek Inovasi Terpadu</h2>
+                        <p class="text-slate-500 mt-1"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i> Solusi Inovasi Lokal untuk <span class="font-semibold text-slate-700" id="final-region">Wilayah</span></p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="triggerToast('Ide berhasil disimpan ke Workspace Anda!', 'success')" class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50 transition shadow-sm">
+                            <i class="fa-regular fa-bookmark"></i> Simpan
+                        </button>
+                        <button onclick="triggerToast('Sukses! Ide Anda telah dipublikasikan ke Leaderboard Lokal.', 'publish')" class="bg-brand-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-brand-700 transition shadow-sm">
+                            Publikasi ke Komunitas
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tabs Navigation -->
+                <div class="border-b border-slate-200 mb-6">
+                    <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                        <button id="tab-bmc" onclick="switchOutputTab('bmc')" class="border-accent-500 text-accent-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition">
+                            Business Model Canvas (Draft)
+                        </button>
+                        <button id="tab-exec" onclick="switchOutputTab('exec')" class="border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition">
+                            Executive Summary
+                        </button>
+                    </nav>
+                </div>
+
+                <div class="grid lg:grid-cols-3 gap-6">
+                    <!-- Left/Main Column: Tab Contents -->
+                    <div class="lg:col-span-2 relative min-h-[400px]">
+                        
+                        <!-- TAB: BMC Content -->
+                        <div id="content-bmc" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 absolute w-full top-0 left-0 transition-opacity duration-300">
+                            <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-table-cells text-accent-500"></i> AI Generated BMC
+                            </h3>
+                            
+                            <!-- Simplified BMC Grid -->
+                            <div class="grid grid-cols-5 gap-2 text-[11px] leading-tight">
+                                <!-- Row 1 -->
+                                <div class="col-span-1 border border-slate-200 bg-slate-50 p-2 rounded">
+                                    <strong class="block mb-1 text-slate-700">Key Partners</strong>
+                                    <ul class="list-disc pl-3 text-slate-600 space-y-1">
+                                        <li>Tokoh Masyarakat / Pemda</li>
+                                        <li>Penyedia Teknologi</li>
+                                        <li>Komunitas Lokal</li>
+                                    </ul>
+                                </div>
+                                <div class="col-span-1 flex flex-col gap-2">
+                                    <div class="border border-slate-200 bg-slate-50 p-2 rounded flex-grow">
+                                        <strong class="block mb-1 text-slate-700">Key Activities</strong>
+                                        <ul class="list-disc pl-3 text-slate-600"><li>Pengembangan Sistem</li><li>Edukasi Komunitas</li></ul>
+                                    </div>
+                                    <div class="border border-slate-200 bg-slate-50 p-2 rounded flex-grow">
+                                        <strong class="block mb-1 text-slate-700">Key Resources</strong>
+                                        <ul class="list-disc pl-3 text-slate-600"><li>Infrastruktur Digital</li><li>Pengetahuan Lokal</li></ul>
+                                    </div>
+                                </div>
+                                <div class="col-span-1 border border-brand-200 bg-brand-50 p-2 rounded relative">
+                                    <div class="absolute -top-2 -right-2 bg-brand-500 text-white text-[9px] px-1 rounded">Inti Sintesis</div>
+                                    <strong class="block mb-1 text-brand-800">Value Propositions</strong>
+                                    <p class="text-brand-700 mb-1">Mengintegrasikan dua konsep lintas disiplin menjadi satu solusi utuh.</p>
+                                    <ul class="list-disc pl-3 text-brand-700">
+                                        <li>Adaptif terhadap konteks daerah.</li>
+                                        <li>Berbasis riset jurnal terverifikasi.</li>
+                                    </ul>
+                                </div>
+                                <div class="col-span-1 flex flex-col gap-2">
+                                    <div class="border border-slate-200 bg-slate-50 p-2 rounded flex-grow">
+                                        <strong class="block mb-1 text-slate-700">Customer Rel.</strong>
+                                        <ul class="list-disc pl-3 text-slate-600"><li>Pendampingan Teknis</li><li>Transparansi Data</li></ul>
+                                    </div>
+                                    <div class="border border-slate-200 bg-slate-50 p-2 rounded flex-grow">
+                                        <strong class="block mb-1 text-slate-700">Channels</strong>
+                                        <ul class="list-disc pl-3 text-slate-600"><li>Platform Digital</li><li>Balai Pertemuan</li></ul>
+                                    </div>
+                                </div>
+                                <div class="col-span-1 border border-slate-200 bg-slate-50 p-2 rounded">
+                                    <strong class="block mb-1 text-slate-700">Customer Segments</strong>
+                                    <ul class="list-disc pl-3 text-slate-600 space-y-1">
+                                        <li>Masyarakat Terdampak</li>
+                                        <li>Pemerintah Daerah</li>
+                                        <li>Lembaga Swadaya</li>
+                                    </ul>
+                                </div>
+                                <!-- Row 2 -->
+                                <div class="col-span-2 border border-slate-200 bg-slate-50 p-2 rounded">
+                                    <strong class="block mb-1 text-slate-700">Cost Structure</strong>
+                                    <ul class="list-disc pl-3 text-slate-600 flex gap-4">
+                                        <li>Pengembangan MVP</li>
+                                        <li>Biaya Operasional</li>
+                                        <li>Edukasi Masyarakat</li>
+                                    </ul>
+                                </div>
+                                <div class="col-span-3 border border-slate-200 bg-slate-50 p-2 rounded">
+                                    <strong class="block mb-1 text-slate-700">Revenue Streams</strong>
+                                    <ul class="list-disc pl-3 text-slate-600 flex gap-4">
+                                        <li>Subsidi/Hibah Inovasi Daerah</li>
+                                        <li>Monetisasi Dampak Positif (Green/Social Impact Fund)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
+                                <p class="text-sm text-yellow-800"><i class="fa-solid fa-quote-left mr-2 opacity-50"></i><span id="output-user-idea" class="italic"></span></p>
+                            </div>
+                        </div>
+
+                        <!-- TAB: Executive Summary Content -->
+                        <div id="content-exec" class="step-hidden bg-white p-6 rounded-2xl shadow-sm border border-slate-200 absolute w-full top-0 left-0 transition-opacity duration-300">
+                            <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-file-lines text-emerald-500"></i> Executive Summary
+                            </h3>
+                            <div class="space-y-4 text-sm text-slate-600 leading-relaxed">
+                                <p><strong>Latar Belakang Tantangan:</strong><br>
+                                Wilayah <span id="exec-region" class="font-semibold text-slate-800"></span> saat ini menghadapi tantangan unik yang membutuhkan intervensi multidisiplin. Berdasarkan sintesis dari dua literatur terverifikasi, ditemukan bahwa penyelesaian masalah ini tidak bisa diselesaikan melalui satu pendekatan tunggal.</p>
+                                
+                                <p><strong>Gagasan Inti (Sintesis):</strong><br>
+                                Sebagai solusi, inovasi ini mengusulkan: 
+                                <span class="block mt-2 p-3 bg-slate-50 border-l-4 border-emerald-500 italic" id="exec-user-idea"></span>
+                                </p>
+                                
+                                <p><strong>Dampak Inovasi:</strong><br>
+                                Dengan memadukan <span id="exec-topic1" class="font-semibold"></span> dan <span id="exec-topic2" class="font-semibold"></span>, solusi ini tidak hanya menyelesaikan akar masalah, tetapi juga memberdayakan komunitas lokal, menjaga kearifan wilayah, serta mengintegrasikan kemajuan teknologi secara tepat guna dan berkelanjutan.</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Column: Citation Graph -->
+                    <div class="lg:col-span-1">
+                        <div class="bg-slate-900 rounded-2xl shadow-sm border border-slate-800 p-6 text-white h-full relative overflow-hidden">
+                            <!-- Abstract bg -->
+                            <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-accent-600 rounded-full blur-3xl opacity-30"></div>
+                            <div class="absolute top-10 -left-10 w-32 h-32 bg-brand-500 rounded-full blur-3xl opacity-20"></div>
+                            
+                            <h3 class="font-bold text-lg mb-6 relative z-10 flex items-center gap-2">
+                                <i class="fa-solid fa-circle-nodes text-brand-400"></i> Citation Network
+                            </h3>
+                            
+                            <!-- Simplified Visual Graph List -->
+                            <div class="relative z-10 flex flex-col gap-0 items-center">
+                                
+                                <!-- Source 1 -->
+                                <div class="kg-node w-full bg-slate-800/80 p-3 rounded-lg border border-slate-700 mb-4 hover:border-brand-400 transition cursor-help" title="Lihat detail jurnal">
+                                    <div class="text-[10px] text-brand-400 font-bold mb-1 uppercase" id="graph-tag1">SUMBER 1</div>
+                                    <div class="text-xs font-medium text-slate-200 truncate" id="graph-title1">Memuat Judul...</div>
+                                </div>
+                                
+                                <!-- Source 2 -->
+                                <div class="kg-node w-full bg-slate-800/80 p-3 rounded-lg border border-slate-700 mb-4 hover:border-accent-400 transition cursor-help" title="Lihat detail jurnal">
+                                    <div class="text-[10px] text-accent-400 font-bold mb-1 uppercase" id="graph-tag2">SUMBER 2</div>
+                                    <div class="text-xs font-medium text-slate-200 truncate" id="graph-title2">Memuat Judul...</div>
+                                </div>
+                                
+                                <!-- Synthesized Idea -->
+                                <div class="w-full bg-gradient-to-r from-brand-600 to-accent-600 p-1 rounded-xl shadow-[0_0_15px_rgba(124,58,237,0.5)] mt-2">
+                                    <div class="bg-slate-900 rounded-lg p-3 text-center">
+                                        <div class="text-[10px] text-white font-bold mb-1">IDE BARU ANDA</div>
+                                        <div class="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-300 to-accent-300">Tersertifikasi AI</div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="mt-8 relative z-10 text-xs text-slate-400 border-t border-slate-700 pt-4">
+                                Sistem reputasi mencatat ide ini dibangun dari 2 literatur terverifikasi ilmiah. 
+                                <span class="text-emerald-400 font-semibold block mt-1"><i class="fa-solid fa-check-circle"></i> Bebas Misinformasi</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <button onclick="resetApp()" class="text-slate-500 hover:text-brand-600 text-sm font-medium underline">
+                        Mulai Sintesis Baru
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. WORKSPACE VIEW (Placeholder) -->
+        <div id="workspace-view" class="view-section step-hidden fade-in text-center py-20">
+            <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 text-3xl mx-auto mb-4">
+                <i class="fa-solid fa-folder-open"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-800 mb-2">Workspace Anda</h2>
+            <p class="text-slate-500">Kumpulan draf ide, BMC, dan jurnal yang telah Anda simpan akan muncul di sini.</p>
+            <button onclick="switchView('main-app-view')" class="mt-6 px-6 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-full font-medium transition">Kembali ke Beranda</button>
+        </div>
+
+        <!-- 3. EKSPLORASI VIEW (Placeholder) -->
+        <div id="explore-view" class="view-section step-hidden fade-in text-center py-20">
+            <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 text-3xl mx-auto mb-4">
+                <i class="fa-solid fa-compass"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-800 mb-2">Eksplorasi Jurnal</h2>
+            <p class="text-slate-500">Cari dan temukan ribuan jurnal lintas disiplin tanpa paywall (Open Access).</p>
+            <button onclick="switchView('main-app-view')" class="mt-6 px-6 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-full font-medium transition">Kembali ke Beranda</button>
+        </div>
+
+        <!-- 4. LEADERBOARD VIEW (Placeholder) -->
+        <div id="leaderboard-view" class="view-section step-hidden fade-in text-center py-20">
+            <div class="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-500 text-3xl mx-auto mb-4">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-800 mb-2">Leaderboard Inovasi Lokal</h2>
+            <p class="text-slate-500">Voting ide terbaik komunitas untuk daerah Jawa Barat, Bangka Belitung, dll.</p>
+            <button onclick="switchView('main-app-view')" class="mt-6 px-6 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-full font-medium transition">Kembali ke Beranda</button>
+        </div>
+
+    </main>
+
+    <!-- Modal Peringatan (Custom Alert) -->
+    <div id="custom-alert" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl transform scale-95 transition-transform duration-300" id="alert-box">
+            <div class="w-12 h-12 rounded-full bg-red-100 text-red-500 flex items-center justify-center text-xl mb-4 mx-auto">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="text-lg font-bold text-center text-slate-800 mb-2">Peringatan</h3>
+            <p id="alert-message" class="text-slate-600 text-sm text-center mb-6">Pesan error disini.</p>
+            <button onclick="closeAlert()" class="w-full bg-slate-800 text-white font-bold py-2 rounded-xl hover:bg-slate-700 transition">
+                Mengerti
+            </button>
+        </div>
+    </div>
+
+    <!-- Interactive Toast Notification -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3"></div>
+
+    <script>
+        // Data Base Mockup untuk Dynamic Curated Reading (Full Fitur)
+        const journalDatabase = {
+            'Internet of Things (IoT)': {
+                keyword: "Sensor IoT Cerdas",
+                title: "Pemanfaatan Sensor IoT Terapung untuk Pemantauan Lingkungan Real-time.",
+                journal: "IEEE Internet of Things Journal (Q1)",
+                abstract: "Penelitian ini mengembangkan prototipe sensor berbasis LoRaWAN. Perangkat ini mampu mengumpulkan data lingkungan secara konstan ke cloud untuk mendeteksi anomali yang membutuhkan respons cepat.",
+                findings: "Jaringan sensor yang disebar luas lebih efektif mencegah masalah daripada pengujian manual, namun rentan terhadap kerusakan fisik eksternal."
+            },
+            'Budaya Lokal': {
+                keyword: "Kearifan Adat Komunitas",
+                title: "Kearifan Lokal dalam Praktik Pertahanan Ekologi Komunitas Tradisional.",
+                journal: "Anthropological Forum (Q2)",
+                abstract: "Studi etnografi meneliti bagaimana komunitas tradisional mempertahankan keseimbangan alam menggunakan struktur sosial dan hukum adat yang dihormati secara turun-temurun.",
+                findings: "Komunitas sangat patuh pada aturan adat dan sistem navigasi kultural, namun sering kesulitan menghadapi masalah industrialisasi modern."
+            },
+            'Krisis Lingkungan': {
+                keyword: "Mitigasi Degradasi Ekosistem",
+                title: "Dampak Perubahan Iklim Terhadap Degradasi Ekosistem dan Mitigasinya.",
+                journal: "Nature Climate Change (Q1)",
+                abstract: "Studi ini menganalisis kerusakan lahan akibat anomali cuaca dan limbah. Kerusakan ekstrem memicu kerugian ekonomi dan ekologi masif yang sulit direstorasi.",
+                findings: "Restorasi wajib dikombinasikan dengan pemantauan prediktif; intervensi manual pasca-kerusakan terbukti sangat tidak efektif secara biaya."
+            },
+            'Ekonomi Kreatif': {
+                keyword: "Sistem Ekonomi Sirkular Berbasis Komunitas",
+                title: "Model Bisnis Sirkular pada UMKM Berbasis Produk Lokal.",
+                journal: "Journal of Cleaner Production (Q1)",
+                abstract: "Penelitian mengeksplorasi transisi dari ekonomi linear ke sirkular dengan memanfaatkan sisa produk lokal menjadi karya bernilai tinggi. Tantangan ada pada akses pasar.",
+                findings: "Pendekatan desain partisipatoris dengan komunitas lokal meningkatkan adopsi produk, menciptakan lapangan kerja sekaligus menyelesaikan masalah limbah."
+            }
+        };
+
+        // State Management
+        let selectedTopics = [];
+        let selectedRegion = "";
+
+        // ==========================================
+        // VIEW NAVIGATION (SPA LOGIC)
+        // ==========================================
+        function switchView(viewId) {
+            // Sembunyikan semua view
+            document.querySelectorAll('.view-section').forEach(el => {
+                el.classList.add('step-hidden');
+            });
+            // Tampilkan view yang dipilih
+            document.getElementById(viewId).classList.remove('step-hidden');
+
+            // Reset active state for nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('text-brand-600');
+                link.classList.add('text-slate-500');
+            });
+
+            // Set active link if applicable
+            if(viewId === 'workspace-view') document.getElementById('nav-workspace').classList.add('text-brand-600');
+            if(viewId === 'explore-view') document.getElementById('nav-explore').classList.add('text-brand-600');
+            if(viewId === 'leaderboard-view') document.getElementById('nav-leaderboard').classList.add('text-brand-600');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ==========================================
+        // APP FLOW LOGIC
+        // ==========================================
+        function hideAllSteps() {
+            document.getElementById('step-0').classList.add('step-hidden');
+            document.getElementById('step-1').classList.add('step-hidden');
+            document.getElementById('step-2').classList.add('step-hidden');
+            document.getElementById('step-3').classList.add('step-hidden');
+            document.getElementById('step-4').classList.add('step-hidden');
+            document.getElementById('loading-state').classList.add('step-hidden');
+        }
+
+        function goToStep(step) {
+            hideAllSteps();
+            document.getElementById(`step-${step}`).classList.remove('step-hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleTopic(element, topicName) {
+            const isSelected = selectedTopics.includes(topicName);
+            
+            if (isSelected) {
+                selectedTopics = selectedTopics.filter(t => t !== topicName);
+                element.classList.remove('border-brand-500', 'bg-brand-50');
+                element.classList.add('border-slate-200');
+            } else {
+                if (selectedTopics.length >= 2) {
+                    showCustomAlert("Anda hanya dapat memilih 2 bidang studi untuk disintesis.");
+                    return;
+                }
+                selectedTopics.push(topicName);
+                element.classList.remove('border-slate-200');
+                element.classList.add('border-brand-500', 'bg-brand-50');
+            }
+            
+            document.getElementById('topic-warning').classList.add('hidden');
+        }
+
+        function processStep1() {
+            if (selectedTopics.length !== 2) {
+                document.getElementById('topic-warning').classList.remove('hidden');
+                return;
+            }
+            
+            selectedRegion = document.getElementById('region-select').value;
+            let regionName = document.getElementById('region-select').options[document.getElementById('region-select').selectedIndex].text.split(' (')[0];
+            
+            // Populate Dynamic Data
+            const topic1Data = journalDatabase[selectedTopics[0]];
+            const topic2Data = journalDatabase[selectedTopics[1]];
+
+            // Step 2 Population
+            document.getElementById('lit1-tag').innerText = selectedTopics[0];
+            document.getElementById('lit1-title').innerText = topic1Data.title;
+            document.getElementById('lit1-journal').innerText = topic1Data.journal;
+            document.getElementById('lit1-abstract').innerText = topic1Data.abstract;
+            document.getElementById('lit1-findings').innerText = topic1Data.findings;
+
+            document.getElementById('lit2-tag').innerText = selectedTopics[1];
+            document.getElementById('lit2-title').innerText = topic2Data.title;
+            document.getElementById('lit2-journal').innerText = topic2Data.journal;
+            document.getElementById('lit2-abstract').innerText = topic2Data.abstract;
+            document.getElementById('lit2-findings').innerText = topic2Data.findings;
+
+            // Step 3 Population
+            document.getElementById('display-region').innerText = regionName;
+            
+            const aiChallenge = `Tantangan: Gabungkan teknologi/konsep "<strong>${topic1Data.keyword}</strong>" dengan "<strong>${topic2Data.keyword}</strong>" untuk menciptakan solusi inovatif di kawasan <span class="font-bold text-yellow-300">${regionName}</span>.<br><br><em>Tuliskan inti ide inovasi Anda. Apa namanya, bagaimana cara kerjanya, dan nilai tambahnya?</em>`;
+            document.getElementById('ai-challenge-text').innerHTML = aiChallenge;
+
+            goToStep(2);
+        }
+
+        // Word Count Logic
+        const textarea = document.getElementById('user-idea');
+        const btnGenerate = document.getElementById('btn-generate');
+        const wordCountDisplay = document.getElementById('word-count');
+
+        textarea.addEventListener('input', function() {
+            const text = this.value.trim();
+            const words = text === "" ? 0 : text.split(/\s+/).length;
+            wordCountDisplay.innerText = `${words} Kata (Min. 20 Kata)`;
+            
+            if (words >= 20) {
+                btnGenerate.removeAttribute('disabled');
+                wordCountDisplay.classList.remove('text-slate-500', 'text-red-500');
+                wordCountDisplay.classList.add('text-emerald-500');
+            } else {
+                btnGenerate.setAttribute('disabled', 'true');
+                if(words > 0) {
+                    wordCountDisplay.classList.add('text-red-500');
+                    wordCountDisplay.classList.remove('text-emerald-500', 'text-slate-500');
+                }
+            }
+        });
+
+        // Generate Output
+        function generateOutput() {
+            const userText = textarea.value;
+            let regionName = document.getElementById('region-select').options[document.getElementById('region-select').selectedIndex].text.split(' (')[0];
+
+            // Setup Step 4 UI
+            document.getElementById('output-user-idea').innerText = userText;
+            document.getElementById('exec-user-idea').innerText = userText;
+            document.getElementById('final-region').innerText = regionName;
+            document.getElementById('exec-region').innerText = regionName;
+            document.getElementById('exec-topic1').innerText = selectedTopics[0];
+            document.getElementById('exec-topic2').innerText = selectedTopics[1];
+
+            // Title Logic
+            const titlePrefix = selectedTopics[0].split(' ')[0]; 
+            const titleSuffix = selectedTopics[1].split(' ')[0];
+            document.getElementById('output-title').innerText = `Proyek ${titlePrefix}-${titleSuffix} Terpadu`;
+
+            // Citation Graph Setup
+            document.getElementById('graph-tag1').innerText = selectedTopics[0];
+            document.getElementById('graph-title1').innerText = journalDatabase[selectedTopics[0]].title;
+            document.getElementById('graph-tag2').innerText = selectedTopics[1];
+            document.getElementById('graph-title2').innerText = journalDatabase[selectedTopics[1]].title;
+
+            // Load Simulation
+            hideAllSteps();
+            document.getElementById('loading-state').classList.remove('step-hidden');
+            
+            const loadingTexts = [
+                "Mengekstrak konsep inti...",
+                "Memetakan ke Business Model Canvas...",
+                "Menulis ulang Executive Summary...",
+                "Membangun struktur Citation Network..."
+            ];
+            
+            let i = 0;
+            const textElement = document.getElementById('loading-text');
+            const interval = setInterval(() => {
+                i++;
+                if (i < loadingTexts.length) {
+                    textElement.innerText = loadingTexts[i];
+                }
+            }, 800);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                hideAllSteps();
+                document.getElementById('step-4').classList.remove('step-hidden');
+                
+                // Ensure default tab is BMC
+                switchOutputTab('bmc');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // Trigger auto toast
+                triggerToast("Sintesis berhasil diselesaikan!", "success");
+            }, 3500);
+        }
+
+        // ==========================================
+        // TAB LOGIC (Step 4)
+        // ==========================================
+        function switchOutputTab(tabType) {
+            const btnBmc = document.getElementById('tab-bmc');
+            const btnExec = document.getElementById('tab-exec');
+            const contentBmc = document.getElementById('content-bmc');
+            const contentExec = document.getElementById('content-exec');
+
+            // Reset Styles
+            btnBmc.className = "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition";
+            btnExec.className = "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition";
+            contentBmc.classList.add('step-hidden');
+            contentExec.classList.add('step-hidden');
+
+            // Set Active
+            if(tabType === 'bmc') {
+                btnBmc.className = "border-accent-500 text-accent-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition";
+                contentBmc.classList.remove('step-hidden');
+            } else {
+                btnExec.className = "border-emerald-500 text-emerald-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition";
+                contentExec.classList.remove('step-hidden');
+            }
+        }
+
+        // ==========================================
+        // UTILITY LOGICS (Reset & Alert & Toast)
+        // ==========================================
+        function resetApp() {
+            selectedTopics = [];
+            document.querySelectorAll('.topic-btn').forEach(btn => {
+                btn.classList.remove('border-brand-500', 'bg-brand-50');
+                btn.classList.add('border-slate-200');
+            });
+            textarea.value = "";
+            wordCountDisplay.innerText = "0 Kata (Min. 20 Kata)";
+            wordCountDisplay.className = "text-xs text-slate-500 mt-2 text-right";
+            btnGenerate.setAttribute('disabled', 'true');
+            
+            goToStep(0);
+        }
+
+        function showCustomAlert(message) {
+            document.getElementById('alert-message').innerText = message;
+            const alertModal = document.getElementById('custom-alert');
+            const alertBox = document.getElementById('alert-box');
+            
+            alertModal.classList.remove('hidden');
+            setTimeout(() => {
+                alertBox.classList.remove('scale-95');
+                alertBox.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeAlert() {
+            const alertModal = document.getElementById('custom-alert');
+            const alertBox = document.getElementById('alert-box');
+            
+            alertBox.classList.remove('scale-100');
+            alertBox.classList.add('scale-95');
+            
+            setTimeout(() => {
+                alertModal.classList.add('hidden');
+            }, 300);
+        }
+
+        function triggerToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            
+            const toast = document.createElement('div');
+            toast.className = `toast-enter flex items-center p-4 rounded-xl shadow-lg border-l-4 bg-white max-w-sm ${type === 'publish' ? 'border-brand-500' : 'border-emerald-500'}`;
+            
+            const iconColor = type === 'publish' ? 'text-brand-500' : 'text-emerald-500';
+            const iconClass = type === 'publish' ? 'fa-solid fa-paper-plane' : 'fa-solid fa-circle-check';
+
+            toast.innerHTML = `
+                <div class="mr-3 ${iconColor} text-xl"><i class="${iconClass}"></i></div>
+                <div class="text-sm font-medium text-slate-700">${message}</div>
+            `;
+            
+            container.appendChild(toast);
+
+            // Remove toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.replace('toast-enter', 'toast-leave');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300); // Wait for leave animation
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
